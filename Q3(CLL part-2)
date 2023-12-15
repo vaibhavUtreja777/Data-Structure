@@ -1,0 +1,102 @@
+#include <iostream>
+using namespace std;
+
+class Node {
+public:
+    int data;
+    Node* next;
+
+    Node(int value) {
+        data = value;
+        next = nullptr;
+    }
+};
+
+class CircularLinkedList {
+private:
+    Node* head;
+
+public:
+    CircularLinkedList() {
+        head = nullptr;
+    }
+
+    void insert(int value) {
+        Node* newNode = new Node(value);
+        if (head == nullptr) {
+            newNode->next = newNode; // Point to itself if the list is empty
+            head = newNode;
+        } else {
+            Node* temp = head;
+            while (temp->next != head) {
+                temp = temp->next;
+            }
+            temp->next = newNode;
+            newNode->next = head;
+        }
+    }
+
+    void remove(int value) {
+        if (head == nullptr) {
+            cout << "List is empty\n";
+            return;
+        }
+
+        Node* curr = head;
+        Node* prev = nullptr;
+
+        // If the element to be deleted is the head
+        if (curr->data == value) {
+            while (curr->next != head) {
+                curr = curr->next;
+            }
+            curr->next = head->next;
+            delete head;
+            head = curr->next;
+        } else {
+            while (curr->next != head && curr->data != value) {
+                prev = curr;
+                curr = curr->next;
+            }
+
+            if (curr->data == value) {
+                prev->next = curr->next;
+                delete curr;
+            } else {
+                cout << "Element not found in the list\n";
+            }
+        }
+    }
+
+    Node* search(int value) {
+        if (head == nullptr) {
+            cout << "List is empty\n";
+            return nullptr;
+        }
+
+        Node* temp = head;
+        do {
+            if (temp->data == value) {
+                return temp;
+            }
+            temp = temp->next;
+        } while (temp != head);
+
+        cout << "Element not found in the list\n";
+        return nullptr;
+    }
+
+    void display() {
+        if (head == nullptr) {
+            cout << "List is empty\n";
+            return;
+        }
+
+        Node* temp = head;
+        do {
+            cout << temp->data << " ";
+            temp = temp->next;
+        } while (temp != head);
+        cout << endl;
+    }
+};
