@@ -1,0 +1,107 @@
+#include <iostream>
+
+using namespace std;
+
+// Node structure for the doubly linked list
+struct Node {
+    int data;
+    Node* prev;
+    Node* next;
+    
+    Node(int val) : data(val), prev(nullptr), next(nullptr) {}
+};
+
+// Doubly linked list class
+class DoublyLinkedList {
+private:
+    Node* head;
+    Node* tail;
+
+public:
+    DoublyLinkedList() : head(nullptr), tail(nullptr) {}
+
+    // Insert at the beginning of the list
+    void insertAtBeginning(int x) {
+        Node* newNode = new Node(x);
+        if (!head) {
+            head = newNode;
+            tail = newNode;
+        } else {
+            newNode->next = head;
+            head->prev = newNode;
+            head = newNode;
+        }
+    }
+
+    // Insert at the end of the list
+    void insertAtEnd(int x) {
+        Node* newNode = new Node(x);
+        if (!tail) {
+            head = newNode;
+            tail = newNode;
+        } else {
+            tail->next = newNode;
+            newNode->prev = tail;
+            tail = newNode;
+        }
+    }
+
+    // Remove from the beginning of the list
+    void removeFromBeginning() {
+        if (!head) {
+            cout << "List is empty. Nothing to remove." << endl;
+            return;
+        }
+        Node* temp = head;
+        head = head->next;
+        if (head)
+            head->prev = nullptr;
+        else
+            tail = nullptr;
+        delete temp;
+    }
+
+    // Remove from the end of the list
+    void removeFromEnd() {
+        if (!tail) {
+            cout << "List is empty. Nothing to remove." << endl;
+            return;
+        }
+        Node* temp = tail;
+        tail = tail->prev;
+        if (tail)
+            tail->next = nullptr;
+        else
+            head = nullptr;
+        delete temp;
+    }
+
+    // Display the list
+    void display() {
+        Node* current = head;
+        while (current) {
+            cout << current->data << " ";
+            current = current->next;
+        }
+        cout << endl;
+    }
+};
+
+// Example usage
+int main() {
+    DoublyLinkedList dll;
+
+    dll.insertAtBeginning(5);
+    dll.insertAtBeginning(10);
+    dll.insertAtEnd(15);
+    dll.display(); // Output: 10 5 15
+
+    dll.removeFromBeginning();
+    dll.display(); // Output: 5 15
+
+    dll.removeFromEnd();
+    dll.display(); // Output: 5
+
+    dll.removeFromEnd(); // Output: List is empty. Nothing to remove.
+    return 0;
+}
